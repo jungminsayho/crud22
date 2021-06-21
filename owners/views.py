@@ -1,3 +1,53 @@
-from django.shortcuts import render
+import json
 
-# Create your views here.
+from django.http import JsonResponse
+from django.views import View
+from owners.models import Owner, Dog
+
+class OwnersView(View):
+    def post(self, request):
+        data = json.loads(request.body) # request의 body를 json형태에서 dictionary형태로 바꿔주기
+        owner = Owner.objects.create(
+            name = data['name'],
+            email = data['email'],
+            age = data['age']
+        )
+        return JsonResponse({'MESSAGE': 'SUCCESS'}, status=201)
+
+    def get(self, request):
+        owners = Owner.objects.all()
+        results = []
+        for owner in owners:
+            results.append(
+                {
+                    "name": owner.name,
+                    "email": owner.email,
+                    "age": owner.age
+                }
+            )
+        return JsonResponse({'results': results}, status=200)
+
+
+
+class DogsView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        dog = Dog.objects.create(
+            owner = Owner.objects.get(name=data['owner']),
+            name = data['name'],
+            age = data['age']
+        )
+        return JsonResponse({'MESSAGE': 'SUCCESS'}, status=201)
+
+    def get(self, request):
+        dogs = Dog.objects.all()
+        results = []
+        for dog in dogs: 
+            results.append(
+                {
+                    "owner": dog.owner.name,
+                    "name": dog.name,
+                    "age": dog.age
+                }
+            )
+        return JsonResponse({'results': results}, status=200) 
