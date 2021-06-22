@@ -18,16 +18,13 @@ class OwnersView(View):
         owners = Owner.objects.all()
         dogs = Dog.objects.all()
         results = []
-        for owner in owners:
+        for owner in owners: 
             results.append(
                 {
                     "name": owner.name,
                     "email": owner.email,
                     "age": owner.age,
-                    "dogs": [{'name': dog.name, 'age': dog.age} for dog in dogs if dog.owner.name == owner.name]
-                
-                    
-
+                    "dogs": [{'name': dog.name, 'age': dog.age} for dog in dogs if dog.owner.name == owner.name]                    
                 }
             )
         return JsonResponse({'results': results}, status=200)

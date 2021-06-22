@@ -19,3 +19,4 @@ class Dog(models.Model):
 
     class Meta:
         db_table = 'dogs'
+
