@@ -17,6 +17,7 @@ class OwnersView(View):
     def get(self, request):
         owners = Owner.objects.all()
         dogs = Dog.objects.all()
+        # dogs = owner.dogs_set.all() # 강아지 역참조해서 불러오기
         results = []
         for owner in owners: 
             results.append(
